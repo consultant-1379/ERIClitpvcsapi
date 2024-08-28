@@ -1,0 +1,14 @@
+###########################################################################
+#    Description: Test to verify regex validation on vcs-clustered-service
+#                 property types deactivates and deactivated.
+###########################################################################
+
+runLitpScript ../cluster_common.atlib
+
+#Step 1: Assert "deactivates" property can't contain multiplie values seperated by a comma
+assertError --err_type ValidationError --err_property deactivates --err_message "Invalid value 'GRP_S1,GRP_SG2'." create -t vcs-clustered-service -p /deployments/test/clusters/cluster1/services/cs1/ -o name="cs1" standby=1 active=1 node_list="node_1,node_2" deactivates="GRP_S1,GRP_SG2"
+
+#Step 2: Assert "deactivated" only accepts a true/false boolean value and not "True"
+assertError --err_type ValidationError --err_property deactivated --err_message "Invalid value 'True'." create -t vcs-clustered-service -p /deployments/test/clusters/cluster1/services/cs1/ -o name="cs1" standby=1 active=1 node_list="node_1,node_2" deactivates="GRP_S1" deactivated=True
+
+

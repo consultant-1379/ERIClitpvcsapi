@@ -1,0 +1,6 @@
+# ensure that the critical_service cannot accept the string with commas.
+litp create -t deployment -p /deployments/d1
+
+let __err --err_message "Invalid value 'Skynet,SHODAN'." --err_type ValidationError --err_property critical_service
+
+assertError __err create -t vcs-cluster -p /deployments/d1/clusters/c1 -o critical_service="Skynet,SHODAN" cluster_type="sfha" low_prio_net="mgmt" llt_nets="hb1,hb2" cluster_id=1
